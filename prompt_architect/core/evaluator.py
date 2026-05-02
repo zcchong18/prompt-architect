@@ -41,7 +41,7 @@ class Evaluator:
         for case in test_cases:
             try:
                 # 1. Render the prompt with the provided inputs
-                rendered_output = template.render(case)
+                rendered_output = template.render(**case)
                 
                 # 2. Perform evaluations
                 eval_metrics = {}

@@ -1,7 +1,7 @@
 import os
 import pytest
 from prompt_architect.core.template import PromptTemplate
-from prompt_architect.core.storage import PromptRepository
+from prompt_architect.core.storage import Storage
 from prompt_architect.core.git_manager import GitManager
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def project_env(tmp_path):
     import subprocess
     subprocess.run(["git", "init"], cwd=str(project_dir), check=True, capture_output=True)
     
-    repo = PromptRepository(str(prompts_dir))
+    repo = Storage(str(prompts_dir))
     git_mgr = GitManager(str(project_dir), str(prompts_dir))
     
     return {

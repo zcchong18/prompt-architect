@@ -2,13 +2,13 @@ import os
 import pytest
 import shutil
 from prompt_architect.core.template import PromptTemplate
-from prompt_architect.core.storage import PromptRepository
+from prompt_architect.core.storage import Storage
 
 @pytest.fixture
 def repo(tmp_path):
     """Provides a clean PromptRepository in a temporary directory for each test."""
     test_dir = tmp_path / "test_prompts"
-    return PromptRepository(str(test_dir))
+    return Storage(str(test_dir))
 
 def test_save_and_load_success(repo):
     """Test that a template can be saved and reloaded perfectly."""
