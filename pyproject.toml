@@ -14,4 +14,9 @@ dependencies = [
 ]
 
 [tool.setuptools]
+package-dir = {"" = "src"}
 packages = ["prompt_architect"]
+
+
+[tool.pytest.alwaysaddsrc]
+pythonpath = ["src"]
