@@ -1,8 +1,8 @@
 # Prompt Architect 🏗️
 
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/)
-[![License: MIT](httpshttps://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Status: Production Ready](https://img.shields.to/badge/status-production--ready-successgreen)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Status: Production Ready](https://img.shields.io/badge/status-production--ready-successgreen)](#)
 
 **Prompt Architect** is a CLI tool designed to bring the power of Git-style version control, testing, and automated evaluation to the world of LLM prompt engineering. 
 
@@ -15,8 +15,8 @@ Prompt engineering is often a chaotic process of trial and error. A minor change
 Prompt Architect introduces several key concepts:
 - **Prompt Versioning:** Track evolution of templates with `commit` and `checkout` semantics.
 - **The "Golden Suite":** Automated regression testing. Run a set of standard inputs against a prompt and ensure the output quality remains consistent.
-- **Structural Integrity:** Uses Pydenc to validate prompt inputs and template structure.
-- **Multi-Provider Agnostic:** Switch seamlessly between local models (Ollama) and cloud giants (OpenAI, Anthropic) without changing your core logic.
+- **Structural Integrity:** Uses Pydantic to validate prompt inputs and template structure.
+- **Multi-Provider Agnostic:** Switch seamlessly between local models (Ollama, llama.cpp) and cloud APIs (OpenAI, Anthropic, Gemini) without changing your core logic.
 
 ## 🚀 Core Features
 
@@ -27,35 +27,53 @@ Create and manage your prompts with a simple CLI.
 python -m prompt_architect.core.cli prompt create "my_greeting" "Hello, {name}!"
 
 # List all templates
-python -m prompt_architect.cli prompt list
+python -m prompt_architect.core.cli prompt list
 ```
 
 ### 🧪 The Evaluation Engine
 Run the "Golden Suite" to catch regressions before they hit production.
 ```bash
+# Run a quick evaluation with test cases
+python -m prompt_architect.core.cli prompt evaluate "my_greeting" --test-cases-json '[{"vars": {"name": "World"}, "expected": "Hello, World!"}]'
+
 # Run the built-in regression demo
 python scripts/demo_regression.py
 ```
 
 ### 🛡️ The Git Layer
 Integrated `GitPython` tracking for a robust, versioned prompt store.
-```bash
-# (Note: Git operations are currently managed internally via GitManager 
-# and can be extended via the CLI in future releases.)
-```
 
 ### 🛡️ Structural Integrity
-Uses `Pydantic` to validate prompt inputs and template structure.
+Uses `Pydantic` to validate prompt inputs and template structure — balanced braces, valid variable names, duplicate detection, and more.
 
 ### 🔄 Regression Detection
-Automatically detect when a change in a template breaks expected outputs.
+Automatically detect when a change in a template breaks expected outputs (exact match, regex, semantic similarity).
+
+### 🔌 Provider Ecosystem
+Six supported providers — switch with a config change:
+- **mock** — deterministic testing (no API needed)
+- **ollama** — local LLMs via Ollama
+- **llamacpp** — OpenAI-compatible local servers (llama.cpp, vLLM, TGI)
+- **openai** — GPT-4o, GPT-4o-mini, etc.
+- **anthropic** — Claude Sonnet 4, Opus 4, etc.
+- **gemini** — Gemini 2.0 Flash, 2.5 Pro, etc.
+
+### ⚙️ Centralized Configuration
+Set API keys and model defaults via environment variables:
+```bash
+export OPENAI_API_KEY="sk-..."
+export ANTHROPIC_API_KEY="sk-ant-..."
+export GEMINI_API_KEY="AIza..."
+export OLLAMA_BASE_URL="http://localhost:11434"
+```
 
 ## 🛠️ Tech Stack
 - **Core:** Python 3.12+
 - **Data Modeling:** `Pydantic`
 - **Testing:** `pytest`
-- **CLI:** `Typer`
+- **CLI:** `Typer` + `rich`
 - **Git Integration:** `GitPython`
+- **HTTP:** `urllib.request` (no extra deps for cloud providers)
 
 ## 📋 Prerequisites
 * Python 3.12+
@@ -68,8 +86,8 @@ git clone https://github.com/zcchong18/prompt-architect.git
 cd prompt-architect
 
 # Create and activate a virtual environment
-python -m v5env venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 
 # Install dependencies
 pip install -e .
@@ -97,10 +115,17 @@ python scripts/demo_regression.py
 
 ## 🗺️ Roadmap
 - [x] Core Engine & Template Management
-- [x] Evaluation Engine (Exact Match/Regex)
-- [ ] Advanced Multi-Provider Support (OpenAI, Anthropic)
-- [ ] Multi-agent Orchestration Capabilities
-- [ ] Advanced Metrics (Semantic Similarity)
+- [x] Evaluation Engine (Exact Match/Regex/Semantic)
+- [x] Schema Validation (Pydantic)
+- [x] CLI Polish (rich tables, panels)
+- [x] Centralized Configuration (env-based)
+- [x] Multi-Provider Support (mock, ollama, openai, anthropic, gemini, llamacpp)
+- [x] Semantic Similarity Scoring (real embeddings)
+- [x] LLM-as-a-Judge Evaluation
+- [x] Prompt Chaining
+- [x] Multi-agent Orchestration
+- [x] Automated Prompt Optimization
+- [ ] Semantic Regression Analysis (real, non-mock)
 
 ---
-*Developed with ❤️ by [Zhi](https://github.com/zc/chong18)*
+*Developed with ❤️ by [Zhi](https://github.com/zcchong18)*

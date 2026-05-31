@@ -35,3 +35,11 @@ class Storage:
     def list_all(self) -> List[str]:
         """Returns a list of all template names available in the repository."""
         return [f.replace('.json', '') for f in os.listdir(self.storage_dir) if f.endswith('.json')]
+
+    def delete(self, name: str) -> None:
+        """Deletes a PromptTemplate file by name."""
+        file_path = self._get_file_path(name)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        else:
+            raise FileNotFoundError(f"No template found with name: {name}")

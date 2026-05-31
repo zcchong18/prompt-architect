@@ -16,7 +16,8 @@ eggs/
 .eggs/
 lib/
 lib64/
-src/
+
+
 *.egg-info/
 .coverage
 .coverage.*
